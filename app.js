@@ -25,7 +25,7 @@ function removeItem(e){
       var li = e.target.parentElement;
       itemList.removeChild(li);
     }
-  }
+}
 }
 
 const items = document.querySelectorAll("#items .list-group-item");
