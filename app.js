@@ -3,15 +3,24 @@ var itemList = document.getElementById('items');
 var filter = document.getElementById('filter');
 
 form.addEventListener('submit', addItem);
-
 itemList.addEventListener('click', removeItem);
+filter.addEventListener('keyup', filterItems);
 
 function addItem(e){
   e.preventDefault();
-  var newItem = document.getElementById('item').value;
+  var inputValue = document.getElementById('item').value;
+  var description = document.getElementById('description').value;
+
   var li = document.createElement('li');
+
   li.className = 'list-group-item';
-  li.appendChild(document.createTextNode(newItem));
+
+  const newText = document.createTextNode(inputValue);
+  const descriptionNode = document.createTextNode("" + description);
+
+  li.appendChild(newText);
+  li.appendChild(descriptionNode);
+  
   var deleteBtn = document.createElement('button');
   deleteBtn.className = 'btn btn-danger btn-sm float-right delete';
   deleteBtn.appendChild(document.createTextNode('X'));
@@ -25,14 +34,20 @@ function removeItem(e){
       var li = e.target.parentElement;
       itemList.removeChild(li);
     }
-}
+  }
 }
 
-const items = document.querySelectorAll("#items .list-group-item");
+function filterItems(e){
+  var text = e.target.value.toLowerCase();
+  var items = itemList.getElementsByTagName('li');
+  Array.from(items).forEach(function(item){
+    var itemName = item.firstChild.textContent;
+    var secondName = item.childNodes[1].textContent;
 
-items.forEach(function(item) {
-  const editButton = document.createElement("button");
-  editButton.innerHTML = "Edit";
-  editButton.classList.add("btn", "btn-secondary", "btn-sm", "float-right", "edit");
-  item.appendChild(editButton);
-});
+    if(itemName.toLowerCase().indexOf(text) != -1 || secondName.toLowerCase().indexOf(text) != -1 ){
+      item.style.display = 'block';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
